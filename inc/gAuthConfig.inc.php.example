@@ -1,0 +1,13 @@
+<?php
+/**
+ * Google API Configration file
+ * 
+ * @author ninthday <jeffy@ninthday.info>
+ */
+
+// Fill CLIENT ID, CLIENT SECRET ID, REDIRECT URI from Google Developer Console
+$application_name = '';
+$client_id = '';
+$client_secret = '';
+$redirect_uri = '';
+$simple_api_key = '';

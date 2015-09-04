@@ -1,0 +1,14 @@
+<?php
+// development envirment setting
+ini_set('display_errors', true);
+error_reporting(E_ALL | E_STRICT);
+// production envirment setting
+//error_reporting(E_ALL & ~E_DEPRECATED);
+
+// Timezone setting
+date_default_timezone_set('Asia/Taipei');
+
+define('_WEB_NAME','niceToolbar | ninthday');                       //網站名稱
+define('_WEB_ADDR','http://example.com');                           //網站位址
+define('_APP_PATH', str_replace('inc','',str_replace('\\', '/', dirname(__FILE__))));   //定義網站實體位置
+?>

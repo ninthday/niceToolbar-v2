@@ -556,3 +556,11 @@ table.dataTable thead .sorting:after {
     border-radius: 50%;
     margin: 10px auto;
 }
+
+.footer {
+    height: 60px;
+    padding: 15px 5px 15px 25px;
+    height: 80px;
+    color: white;
+    background-color: #293846;
+}

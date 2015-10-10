@@ -30,6 +30,8 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
         <link href="resources/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
         <!-- niceToolbar CSS -->
         <link href="css/nicetoolbar.css" rel="stylesheet">
+        <!-- NProgress CSS -->
+        <link rel='stylesheet' href="resources/nprogress/nprogress.css">
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -279,13 +281,16 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Tcat View<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">URL Analysis</a>
+                                        <a href="#">Bin Overview</a>
                                     </li>
                                     <li>
                                         <a href="#">URL Analysis</a>
                                     </li>
                                     <li>
-                                        <a href="#">Morris.js Charts</a>
+                                        <a href="#">Mention Analysis</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Language Analysis</a>
                                     </li>
                                 </ul>
                             </li>
@@ -384,6 +389,9 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                                 </div>
                                 <!-- /input-group -->
                             </li>
+                            <li>
+<?php include './footer.php'; ?>
+                            </li>
                         </ul>
                     </div>
                     <!-- /.sidebar-collapse -->
@@ -396,20 +404,11 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                         <div class="card">
                             <div class="shop-item-image"></div>
                             <div class="title"><h3>HKAll</h3></div>
-                            <div class="description">
-                                <p>香港佔中事件資料</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card">
-                            <div class="shop-item-image"></div>
-                            <div class="title"><h3>HKAll</h3></div>
                             <div class="bin-info">
                                 <div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; 201,598</div>
                                 <div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; 2014-08-27 ~ 2014-12-14</div>
-                                <div class="info-item"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
-                                <div class="info-item"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
+                                <div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
+                                <div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
                             </div>
                             <div class="description">
                                 <p>香港佔中事件資料</p>
@@ -421,12 +420,45 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                         <div class="card">
                             <div class="shop-item-image"></div>
                             <div class="title"><h3>HKAll</h3></div>
+                            <div class="bin-info">
+                                <div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; 201,598</div>
+                                <div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; 2014-08-27 ~ 2014-12-14</div>
+                                <div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
+                                <div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
+                            </div>
+                            <div class="description">
+                                <p>香港佔中事件資料</p>
+                            </div>
+                            <div class="actions"><a class="btn btn-info btn-small" href="#">See More Information&nbsp; <i class="fa fa-chevron-circle-right"></i></a></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card">
+                            <div class="shop-item-image"></div>
+                            <div class="title"><h3>HKAll</h3></div>
+                            <div class="bin-info">
+                                <div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; 201,598</div>
+                                <div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; 2014-08-27 ~ 2014-12-14</div>
+                                <div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
+                                <div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
+                            </div>
+                            <div class="description">
+                                <p>香港佔中事件資料</p>
+                            </div>
+                            <div class="actions"><a class="btn btn-info btn-small" href="#">See More Information&nbsp; <i class="fa fa-chevron-circle-right"></i></a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display: none;">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card">
+                            <div class="shop-item-image"></div>
+                            <div class="title"><h3>HKAll</h3></div>
                             <div class="description">
                                 <p>香港佔中事件資料</p>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <!-- /#page-wrapper -->
@@ -439,8 +471,21 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <!-- Metis Menu Plugin JavaScript -->
         <script src="resources/metisMenu/dist/metisMenu.min.js"></script>
+        <!-- NProcess JavaScript -->
+        <script src='resources/nprogress/nprogress.js'></script>
+        <!-- Highcharts JavaScript -->
+        <script src="http://code.highcharts.com/highcharts.js"></script>
         <!-- Custom Theme JavaScript -->
         <script src="js/sb-admin-2.js"></script>
+        <script type="text/javascript" src="js/dashboard.js"></script>
+        <script type="text/javascript">
+            $(document).ajaxStart(function () {
+                NProgress.start();
+            })
+                    .ajaxStop(function () {
+                        NProgress.done();
+                    });
+        </script>
     </body>
 
 </html>

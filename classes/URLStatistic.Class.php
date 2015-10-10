@@ -4,12 +4,11 @@
  * 分析 URL 的類別
  *
  * @author ninthday <bee.me@ninthday.info>
- * @version 1.0
  * @copyright (c) 2014, Jeffy Shih
  * @version 1.0
  */
 
-namespace ninthday\niceToolbar;
+namespace ninthday\niceTcatBar;
 
 class URLStatistic
 {

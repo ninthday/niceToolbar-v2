@@ -1,18 +1,3 @@
-<?php
-session_start();
-require './inc/setup.inc.php';
-
-// Include Google API init file
-require_once _APP_PATH . 'inc/gAuth.inc.php';
-
-//Set Access Token to make Request
-if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
-    $gClient->setAccessToken($_SESSION['access_token']);
-    $userData = $objOAuthService->userinfo->get();
-} else {
-    header('Location: ' . _WEB_ADDR . 'gauth.php');
-}
-?>
 <!DOCTYPE html>
 <html lang="zh-Hant">
     <head>
@@ -30,8 +15,6 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
         <link href="resources/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
         <!-- niceToolbar CSS -->
         <link href="css/nicetoolbar.css" rel="stylesheet">
-        <!-- NProgress CSS -->
-        <link rel='stylesheet' href="resources/nprogress/nprogress.css">
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -268,29 +251,21 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
-                            <li class="sidebar-header text-center">
-                                <img class="circle-image-small" src="<?php echo $userData->picture; ?>"><br>
-                                <p>Hi, <?php echo $userData->givenName; ?></p>
-                                <a href="<?php echo _WEB_ADDR . 'gauth.php' ?>?logout"><i class="fa fa-sign-out fa-lg"></i>&nbsp;|&nbsp;Logout</a>
+                            <li class="sidebar-header">
+
                             </li>
 
                             <li>
                                 <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Tcat View<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> FloodFire-Tcat<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">Bin Overview</a>
+                                        <a href="flot.html">Flot Charts</a>
                                     </li>
                                     <li>
-                                        <a href="#">URL Analysis</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Mention Analysis</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Language Analysis</a>
+                                        <a href="morris.html">Morris.js Charts</a>
                                     </li>
                                 </ul>
                             </li>
@@ -389,9 +364,6 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                                 </div>
                                 <!-- /input-group -->
                             </li>
-                            <li>
-                                <?php include './footer.php'; ?>
-                            </li>
                         </ul>
                     </div>
                     <!-- /.sidebar-collapse -->
@@ -399,7 +371,16 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                 <!-- /.navbar-static-side -->
             </nav>
             <div id="page-wrapper">
-                <div class="row" style="display: none;">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card">
+                            <div class="shop-item-image"></div>
+                            <div class="title"><h3>HKAll</h3></div>
+                            <div class="description">
+                                <p>香港佔中事件資料</p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-4 col-sm-6">
                         <div class="card">
                             <div class="shop-item-image"></div>
@@ -407,8 +388,8 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                             <div class="bin-info">
                                 <div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; 201,598</div>
                                 <div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; 2014-08-27 ~ 2014-12-14</div>
-                                <div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
-                                <div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
+                                <div class="info-item"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
+                                <div class="info-item"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
                             </div>
                             <div class="description">
                                 <p>香港佔中事件資料</p>
@@ -420,34 +401,12 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                         <div class="card">
                             <div class="shop-item-image"></div>
                             <div class="title"><h3>HKAll</h3></div>
-                            <div class="bin-info">
-                                <div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; 201,598</div>
-                                <div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; 2014-08-27 ~ 2014-12-14</div>
-                                <div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
-                                <div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
-                            </div>
                             <div class="description">
                                 <p>香港佔中事件資料</p>
                             </div>
-                            <div class="actions"><a class="btn btn-info btn-small" href="#">See More Information&nbsp; <i class="fa fa-chevron-circle-right"></i></a></div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card">
-                            <div class="shop-item-image"></div>
-                            <div class="title"><h3>HKAll</h3></div>
-                            <div class="bin-info">
-                                <div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; 201,598</div>
-                                <div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; 2014-08-27 ~ 2014-12-14</div>
-                                <div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
-                                <div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
-                            </div>
-                            <div class="description">
-                                <p>香港佔中事件資料</p>
-                            </div>
-                            <div class="actions"><a class="btn btn-info btn-small" href="#">See More Information&nbsp; <i class="fa fa-chevron-circle-right"></i></a></div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <!-- /#page-wrapper -->
@@ -460,21 +419,8 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <!-- Metis Menu Plugin JavaScript -->
         <script src="resources/metisMenu/dist/metisMenu.min.js"></script>
-        <!-- NProcess JavaScript -->
-        <script src='resources/nprogress/nprogress.js'></script>
-        <!-- Highcharts JavaScript -->
-        <script src="http://code.highcharts.com/highcharts.js"></script>
         <!-- Custom Theme JavaScript -->
         <script src="js/sb-admin-2.js"></script>
-        <script type="text/javascript" src="js/dashboard.js"></script>
-        <script type="text/javascript">
-            $(document).ajaxStart(function () {
-                NProgress.start();
-            })
-                    .ajaxStop(function () {
-                        NProgress.done();
-                    });
-        </script>
     </body>
 
 </html>

@@ -2,20 +2,28 @@ $(document).ready(function () {
 
     showDashboardList();
 
+    $("#page-wrapper").on("click", "button[id^='more-']", function () {
+        var bin_id = $(this).attr("id").replace('more-', '');
+        console.log(bin_id);
+    });
+
     function getBinCard(content) {
-        var card = '';
-        card += '<div class="col-md-4 col-sm-6"><div class="card">';
-        card += '<div class="title"><h3>' + content.bin_name + '</h3></div>';
-        card += '<div class="shop-item-image" id="bin-' + content.bin_id + '"  style="min-width: 200px; height: 200px; margin: 0 auto"></div>';
-        card += '<div class="bin-info">';
-        card += '<div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; ' + content.bin_pharses.join(', ') + '</div>';
-        card += '<div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; ' + content.data_start + ' ~ ' + content.data_end + '</div>';
+        var card = '', card_type = '', card_active = '';
+        card_type = (content.active_state)?' card-danger':' card-default';
+        card_active = (content.active_state)?' card-active':'';
+        card += '<div class="col-md-4 col-sm-6"><div class="card' + card_type + '">';
+        card += '<div class="card-title' + card_active + '"><h3>' + content.bin_name + '</h3></div>';
+        card += '<div class="card-content">';
+        card += '<div class="shop-item-image" id="bin-' + content.bin_id + '"  style="min-width: 200px; height: 200px; margin: 0 auto"></div></div>';
+        card += '<div class="card-info">';
+        card += '<div class="info-item" title="Phrases"><i class="fa fa-dot-circle-o"></i>&nbsp; ' + content.bin_pharses.join(', ') + '</div>';
+        card += '<div class="info-item" title="Duration"><i class="fa fa-calendar"></i>&nbsp; ' + content.data_start + ' ~ ' + content.data_end + '</div>';
         card += '<div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; ' + content.period_start + '</div>';
         card += '<div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; ' + content.peroid_end + '</div>';
-        card += '</div>';
+        card += '</div><div class="card-content">';
         card += '<div class="description"><p>' + content.bin_comment + '</p></div>';
-        card += '<div class="actions"><a class="btn btn-info btn-small" href="#">See More Information&nbsp; <i class="fa fa-chevron-circle-right"></i></a></div>';
-        card += '</div></div>';
+        card += '<div class="actions"><button type="button" class="btn btn-info btn-small" id="more-' + content.bin_id + '">See More Information&nbsp;';
+        card += ' <i class="fa fa-chevron-circle-right"></i></button></div></div></div></div>';
 
         return card;
     }
@@ -97,8 +105,7 @@ $(document).ready(function () {
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Number of Tweets',
-                            align: 'high'
+                            text: null
                         },
                         labels: {
                             overflow: 'justify'

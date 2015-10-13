@@ -91,8 +91,8 @@ if ($gClient->getAccessToken()) {
                 <div class="col-xs-8 col-md-4">
                     <div class="card">
                         <div class="shop-item-image"></div>
-                        <div class="title"><h2>Welcome to niceToolBar!</h2></div>
-                        <div class="content">
+                        <div class="card-title"><h2>Welcome to niceToolBar!</h2></div>
+                        <div class="cart-content">
                             <center>
                                 <!-- Show Login if the OAuth Request URL is set -->
                                 <?php if (isset($authUrl)){ ?>

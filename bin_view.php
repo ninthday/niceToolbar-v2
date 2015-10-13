@@ -12,6 +12,7 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
 } else {
     header('Location: ' . _WEB_ADDR . 'gauth.php');
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -30,8 +31,8 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
         <link href="resources/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
         <!-- niceToolbar CSS -->
         <link href="css/nicetoolbar.css" rel="stylesheet">
-        <!-- NProgress CSS -->
-        <link rel='stylesheet' href="resources/nprogress/nprogress.css">
+        <!-- bootstrap datePicker CSS -->
+        <link href="resources/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet">
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -365,7 +366,7 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
-                            </li>
+                            </li> 
                             <li>
                                 <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
@@ -399,55 +400,219 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                 <!-- /.navbar-static-side -->
             </nav>
             <div id="page-wrapper">
-                <div class="row" style="display: none;">
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card card-default">
                             <div class="shop-item-image"></div>
-                            <div class="title"><h3>HKAll</h3></div>
-                            <div class="bin-info">
-                                <div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; 201,598</div>
-                                <div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; 2014-08-27 ~ 2014-12-14</div>
-                                <div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
-                                <div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
+                            <div class="card-title"><h3>Bin Information</h3></div>
+                            <div class="card-info">
+                                <h3>HuanZhu</h3><small>Bin Name</small>
+                                <div class="description">
+                                    <p>香港佔中事件資料</p>
+                                </div>
                             </div>
-                            <div class="description">
-                                <p>香港佔中事件資料</p>
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <i class="fa fa-twitter"></i>
+                                        <h3>201,598</h3><small>Number of Tweets</small>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <i class="fa fa-user"></i>
+                                        <h3>151,367</h3><small>Number of Users</small>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="actions"><a class="btn btn-info btn-small" href="#">See More Information&nbsp; <i class="fa fa-chevron-circle-right"></i></a></div>
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <i class="fa fa-calendar"></i>
+                                        <h4>2014-08-23 09:30:15</h4><small>Data Start</small>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <i class="fa fa-calendar"></i>
+                                        <h4>2014-08-23 09:30:15</h4><small>Data End</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <i class="fa fa-clock-o"></i>
+                                        <h4>2014-08-23 09:30:15</h4><small>Collect Start</small>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <i class="fa fa-clock-o"></i>
+                                        <h4>2014-08-23 09:30:15</h4><small>Collect End</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <span class="phrase">洪秀柱</span><span class="phrase">朱立倫</span><span class="phrase">換柱</span><span class="phrase">挺柱</span><span class="phrase">挺朱</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card">
-                            <div class="shop-item-image"></div>
-                            <div class="title"><h3>HKAll</h3></div>
-                            <div class="bin-info">
-                                <div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; 201,598</div>
-                                <div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; 2014-08-27 ~ 2014-12-14</div>
-                                <div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
-                                <div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6">
+                                <div class="card card-info">
+                                    <div class="card-title"><h3>Sub-Bin Infomation</h3></div>
+                                    <div class="card-info">
+                                        <small>Sub-Bin Condition</small>
+                                        <div class="info-item" title="Phrases"><i class="fa fa-calendar"></i>&nbsp; </div>
+                                        <div class="info-item" title="Search"><i class="fa fa-search"></i>&nbsp; </div>
+                                        <div class="info-item" title="User"><i class="fa fa-user"></i>&nbsp; Alex037</div>
+                                        <div class="info-item" title="Language"><i class="fa fa-microphone"></i>&nbsp; en, zh, zh-tw</div>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <i class="fa fa-twitter"></i>
+                                                <h3>201,598</h3><small>Number of Tweets</small>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <i class="fa fa-user"></i>
+                                                <h3>151,367</h3><small>Number of Users</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="actions">
+                                            <button type="button" class="btn btn-info btn-small"><i class="fa fa-bookmark"></i>&nbsp;&nbsp;Bookmark this</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="description">
-                                <p>香港佔中事件資料</p>
+                            <div class="col-md-8 col-sm-6">
+                                <div class="card card-warning">
+                                    <div class="card-title"><h3>Sub-Bin Creator</h3></div>
+                                    <div class="card-content">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label for="duration">Data Duration</label>
+                                                    <div class="input-daterange input-group" id="datepicker">
+                                                        <input type="text" class="input-sm form-control" name="startday" value="">
+                                                        <span class="input-group-addon">to</span>
+                                                        <input type="text" class="input-sm form-control" name="endday" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="search-text">Search</label>
+                                                    <input type="text" class="form-control" id="search-text" placeholder="Search Tweets Content">
+                                                    <p class="help-block">empty: from any text.</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="from-user">From User</label>
+                                                    <input type="text" class="form-control" id="from-user" placeholder="From User">
+                                                    <p class="help-block">empty: from any user.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label for="resolution">Resolution</label><br>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="resolution" id="perdays" value="per-day" checked="checked"> days
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="resolution" id="perhours" value="per-hour"> hours
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label for="language">Language</label><br>
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox" name="language" id="lan-en" value="en"> en
+                                                    </label>
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox" name="language" id="lan-zh" value="zh"> zh
+                                                    </label>
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox" name="language" id="lan-zhtw" value="zh-tw" checked="checked"> zh-tw
+                                                    </label>
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox" name="language" id="lan-other" value="other"> other
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="actions">
+                                            <button type="button" class="btn btn-warning btn-small"><i class="fa fa-refresh"></i>&nbsp;&nbsp;Update Sub-Bin</button>&nbsp;
+                                            <button type="button" class="btn btn-small"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Reset</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="actions"><a class="btn btn-info btn-small" href="#">See More Information&nbsp; <i class="fa fa-chevron-circle-right"></i></a></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="card card-default">
+                                    <div class="card-content">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div style="min-width: 200px; height: 300px; margin: 0 auto"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="resolution">Resolution</label><br>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="resolution" id="perdays" value="per-day" checked="checked"> days
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="resolution" id="perhours" value="per-hour"> hours
+                                                    </label>
+                                                </div>
+                                                <button type="button" class="btn btn-small">Redraw</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8 col-sm-12">
+                                <div class="card card-default">
+                                    <div class="card-content">
+                                        <div class="row">
+                                            <div class="col-md-4 col-xs-6">
+                                                <h4>151,367</h4><small>Contain Mentions</small>
+                                                <div style="height: 200px; margin: 0 auto"></div>
+                                            </div>
+                                            <div class="col-md-4  col-xs-6">
+                                                <h4>151,367</h4><small>Contain Hashtags</small>
+                                                <div style="height: 200px; margin: 0 auto"></div>
+                                            </div>
+                                            <div class="col-md-4 col-xs-6">
+                                                <h4>151,367</h4><small>Contain Media</small>
+                                                <div style="height: 200px; margin: 0 auto"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="card card-default">
+                                    <div class="card-content">
+                                        <h4>Language</h4><small>Percentage (%)</small>
+                                        <div style="height: 200px; margin: 0 auto"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card">
-                            <div class="shop-item-image"></div>
-                            <div class="title"><h3>HKAll</h3></div>
-                            <div class="bin-info">
-                                <div class="info-item" title="Total tweets"><i class="fa fa-twitter"></i>&nbsp; 201,598</div>
-                                <div class="info-item" title="Bin duration"><i class="fa fa-calendar"></i>&nbsp; 2014-08-27 ~ 2014-12-14</div>
-                                <div class="info-item" title="Bin start time"><i class="fa fa-clock-o"></i>&nbsp; 2014-08-23 09:30:15</div>
-                                <div class="info-item" title="Bin end time"><i class="fa fa-archive"></i>&nbsp; 2014-12-20 23:20:53</div>
-                            </div>
-                            <div class="description">
-                                <p>香港佔中事件資料</p>
-                            </div>
-                            <div class="actions"><a class="btn btn-info btn-small" href="#">See More Information&nbsp; <i class="fa fa-chevron-circle-right"></i></a></div>
-                        </div>
-                    </div>
+
+
                 </div>
             </div>
             <!-- /#page-wrapper -->
@@ -460,20 +625,16 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <!-- Metis Menu Plugin JavaScript -->
         <script src="resources/metisMenu/dist/metisMenu.min.js"></script>
-        <!-- NProcess JavaScript -->
-        <script src='resources/nprogress/nprogress.js'></script>
-        <!-- Highcharts JavaScript -->
-        <script src="http://code.highcharts.com/highcharts.js"></script>
         <!-- Custom Theme JavaScript -->
         <script src="js/sb-admin-2.js"></script>
-        <script type="text/javascript" src="js/dashboard.js"></script>
+        <script src="resources/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript">
-            $(document).ajaxStart(function () {
-                NProgress.start();
-            })
-                    .ajaxStop(function () {
-                        NProgress.done();
-                    });
+            $('.input-daterange').datepicker({
+                format: "yyyy-mm-dd",
+                startView: 1,
+                autoclose: true,
+                todayHighlight: true
+            });
         </script>
     </body>
 

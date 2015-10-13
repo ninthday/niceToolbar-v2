@@ -13,6 +13,22 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
     header('Location: ' . _WEB_ADDR . 'gauth.php');
 }
 
+require_once _APP_PATH . 'classes/myPDOConn.Class.php';
+require_once _APP_PATH . 'classes/BinManager.Class.php';
+
+use ninthday\niceToolbar\myPDOConn;
+use ninthday\niceTcatBar\BinManager;
+
+$binID = intval(filter_input(INPUT_GET, 'bid', FILTER_SANITIZE_NUMBER_INT));
+
+try {
+    $tcatPDOConn = myPDOConn::getInstance('tcatPDOConnConfig.inc.php');
+    $objBinMgr = new BinManager($tcatPDOConn);
+    $objBin = $objBinMgr->getBinByBinID($binID);
+} catch (Exception $exc) {
+    echo $exc->getMessage();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -402,24 +418,28 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-md-3 col-sm-6">
-                        <div class="card card-default">
+                        <?php
+                        $cardType = ($objBin->activeState)?'card-danger':'card-default';
+                        $cardActive = ($objBin->activeState)?'card-active':'';
+                        ?>
+                        <div class="card <?php echo $cardType; ?>">
                             <div class="shop-item-image"></div>
-                            <div class="card-title"><h3>Bin Information</h3></div>
+                            <div class="card-title <?php echo $cardActive; ?>"><h3>Bin Information</h3></div>
                             <div class="card-info">
-                                <h3>HuanZhu</h3><small>Bin Name</small>
+                                <h3><?php echo $objBin->binName; ?></h3><small>Bin Name</small>
                                 <div class="description">
-                                    <p>香港佔中事件資料</p>
+                                    <p><?php echo $objBin->binComment; ?></p>
                                 </div>
                             </div>
                             <div class="card-content">
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <i class="fa fa-twitter"></i>
-                                        <h3>201,598</h3><small>Number of Tweets</small>
+                                        <h3><?php echo number_format($objBin->nrOfTweets); ?></h3><small>Number of Tweets</small>
                                     </div>
                                     <div class="col-xs-6">
                                         <i class="fa fa-user"></i>
-                                        <h3>151,367</h3><small>Number of Users</small>
+                                        <h3><?php echo number_format($objBin->nrOfUsers); ?></h3><small>Number of Users</small>
                                     </div>
                                 </div>
                             </div>
@@ -427,11 +447,11 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <i class="fa fa-calendar"></i>
-                                        <h4>2014-08-23 09:30:15</h4><small>Data Start</small>
+                                        <h4><?php echo $objBin->dataStart; ?></h4><small>Data Start</small>
                                     </div>
                                     <div class="col-xs-6">
                                         <i class="fa fa-calendar"></i>
-                                        <h4>2014-08-23 09:30:15</h4><small>Data End</small>
+                                        <h4><?php echo $objBin->dataEnd; ?></h4><small>Data End</small>
                                     </div>
                                 </div>
                             </div>
@@ -439,16 +459,20 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <i class="fa fa-clock-o"></i>
-                                        <h4>2014-08-23 09:30:15</h4><small>Collect Start</small>
+                                        <h4><?php echo $objBin->periodStart; ?></h4><small>Collect Start</small>
                                     </div>
                                     <div class="col-xs-6">
                                         <i class="fa fa-clock-o"></i>
-                                        <h4>2014-08-23 09:30:15</h4><small>Collect End</small>
+                                        <h4><?php echo $objBin->periodEnd; ?></h4><small>Collect End</small>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-content">
-                                <span class="phrase">洪秀柱</span><span class="phrase">朱立倫</span><span class="phrase">換柱</span><span class="phrase">挺柱</span><span class="phrase">挺朱</span>
+                                <?php
+                                foreach ($objBin->binPhrases as $binPhrase) {
+                                    echo '<span class="phrase">' . $binPhrase . '</span>';
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -492,9 +516,9 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
                                                 <div class="form-group">
                                                     <label for="duration">Data Duration</label>
                                                     <div class="input-daterange input-group" id="datepicker">
-                                                        <input type="text" class="input-sm form-control" name="startday" value="">
+                                                        <input type="text" class="input-sm form-control" name="startday" value="<?php echo date("Y-m-d", strtotime($objBin->dataStart)); ?>">
                                                         <span class="input-group-addon">to</span>
-                                                        <input type="text" class="input-sm form-control" name="endday" value="">
+                                                        <input type="text" class="input-sm form-control" name="endday" value="<?php echo date("Y-m-d", strtotime($objBin->dataEnd)); ?>">
                                                     </div>
                                                 </div>
                                             </div>

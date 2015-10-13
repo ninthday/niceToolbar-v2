@@ -41,7 +41,7 @@ class BinManager
         $stmt->bindParam(':binID', $binID, \PDO::PARAM_INT);
         $stmt->execute();
         if (!$result = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            throw new Exception('Problem in getting Bin profile, Bin ID is ' . $binID . '.');
+            throw new \Exception('Problem in getting Bin profile, Bin ID is ' . $binID . '.');
         } else {
             $objBin = new TcatBin();
             $objBin->binID = $binID;
@@ -51,8 +51,9 @@ class BinManager
             $objBin->periodStart = $result['starttime'];
             $objBin->periodEnd = $result['endtime'];
             $objBin->binComment = $result['comments'];
-            $nbtNDatatime = $this->getNbrOfTweetsDataTime($objBin->binName);
+            $nbtNDatatime = $this->getNbrOfTweetsUsersDataTime($objBin->binName);
             $objBin->nrOfTweets = $nbtNDatatime['nrOfTweets'];
+            $objBin->nrOfUsers = $nbtNDatatime['nrOfUsers'];
             $objBin->dataStart = $nbtNDatatime['dataStart'];
             $objBin->dataEnd = $nbtNDatatime['dataEnd'];
             $objBin->binPhrases = $this->getPhrases($binID, $objBin->binType,
@@ -61,9 +62,9 @@ class BinManager
         return $objBin;
     }
 
-    protected function getNbrOfTweetsDataTime($binName)
+    protected function getNbrOfTweetsUsersDataTime($binName)
     {
-        $sql = "SELECT COUNT(*) AS `nrOfTweets`, MIN(`created_at`) AS `dataStart`, "
+        $sql = "SELECT COUNT(*) AS `nrOfTweets`, COUNT(DISTINCT `from_user_id`) AS `nrOfUsers`, MIN(`created_at`) AS `dataStart`, "
                 . "MAX(`created_at`) AS `dataEnd` FROM `" . $binName . "_tweets`";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();

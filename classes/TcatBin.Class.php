@@ -29,6 +29,7 @@ class TcatBin implements \JsonSerializable
     protected $dataStart;
     protected $dataEnd;
     protected $nrOfTweets;
+    protected $nrOfUsers;
     protected $binPhrases = array();
     protected $binComment;
 
@@ -70,6 +71,9 @@ class TcatBin implements \JsonSerializable
                 case 'nrOfTweets':
                     $this->nrOfTweets = intval($value);
                     break;
+                case 'nrOfUsers':
+                    $this->nrOfUsers = intval($value);
+                    break;
                 case 'binPhrases':
                     if (is_array($value)) {
                         $this->binPhrases = $value;
@@ -98,6 +102,7 @@ class TcatBin implements \JsonSerializable
             'data_start' => $this->dataStart,
             'data_end' => $this->dataEnd,
             'nbr_tweets' => $this->nrOfTweets,
+            'nbr_users' => $this->nrOfUsers,
             'bin_pharses' => $this->binPhrases,
             'bin_comment' => $this->binComment
         );

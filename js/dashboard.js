@@ -5,6 +5,7 @@ $(document).ready(function () {
     $("#page-wrapper").on("click", "button[id^='more-']", function () {
         var bin_id = $(this).attr("id").replace('more-', '');
         console.log(bin_id);
+        window.location.href = 'bin_view.php?bid=' + bin_id;
     });
 
     function getBinCard(content) {
@@ -35,7 +36,7 @@ $(document).ready(function () {
     }
 
     function showDashboardList() {
-        jqxhr = $.getJSON('ajax_dashboard.php', {
+        var jqxhr = $.getJSON('ajax_dashboard.php', {
             op: 'top',
             nr: 9
         });
@@ -59,7 +60,7 @@ $(document).ready(function () {
                 });
 
             } else {
-                $("#msg_dialog").html('<img src="images/non-apply.gif" />&nbsp;' + data.rsStr);
+                $("#msg_dialog").html('<img src="images/non-apply.gif" />&nbsp;' + data.rsContents);
                 $("#msg_dialog").slideDown('slow');
                 setTimeout(function () {
                     $("#msg_dialog").slideUp('slow', function () {
@@ -134,7 +135,7 @@ $(document).ready(function () {
                         }]
                 });
             } else {
-                $("#msg_dialog").html('<img src="images/non-apply.gif" />&nbsp;' + data.rsStr);
+                $("#msg_dialog").html('<img src="images/non-apply.gif" />&nbsp;' + data.rsContents);
                 $("#msg_dialog").slideDown('slow');
                 setTimeout(function () {
                     $("#msg_dialog").slideUp('slow', function () {

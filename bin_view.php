@@ -28,7 +28,6 @@ try {
 } catch (Exception $exc) {
     echo $exc->getMessage();
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -42,13 +41,14 @@ try {
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <!-- Font Awesome -->
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-
         <!-- MetisMenu CSS -->
         <link href="resources/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
         <!-- niceToolbar CSS -->
         <link href="css/nicetoolbar.css" rel="stylesheet">
         <!-- bootstrap datePicker CSS -->
         <link href="resources/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet">
+        <!-- NProgress CSS -->
+        <link rel='stylesheet' href="resources/nprogress/nprogress.css">
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -419,8 +419,8 @@ try {
                 <div class="row">
                     <div class="col-md-3 col-sm-6">
                         <?php
-                        $cardType = ($objBin->activeState)?'card-danger':'card-default';
-                        $cardActive = ($objBin->activeState)?'card-active':'';
+                        $cardType = ($objBin->activeState) ? 'card-danger' : 'card-default';
+                        $cardActive = ($objBin->activeState) ? 'card-active' : '';
                         ?>
                         <div class="card <?php echo $cardType; ?>">
                             <div class="shop-item-image"></div>
@@ -428,6 +428,7 @@ try {
                             <div class="card-info">
                                 <h3><?php echo $objBin->binName; ?></h3><small>Bin Name</small>
                                 <div class="description">
+                                    <input type="hidden" id="bin-id" value="<?php echo $binID; ?>">
                                     <p><?php echo $objBin->binComment; ?></p>
                                 </div>
                             </div>
@@ -483,10 +484,10 @@ try {
                                     <div class="card-title"><h3>Sub-Bin Infomation</h3></div>
                                     <div class="card-info">
                                         <small>Sub-Bin Condition</small>
-                                        <div class="info-item" title="Phrases"><i class="fa fa-calendar"></i>&nbsp; </div>
-                                        <div class="info-item" title="Search"><i class="fa fa-search"></i>&nbsp; </div>
-                                        <div class="info-item" title="User"><i class="fa fa-user"></i>&nbsp; Alex037</div>
-                                        <div class="info-item" title="Language"><i class="fa fa-microphone"></i>&nbsp; en, zh, zh-tw</div>
+                                        <div class="info-item" title="Data Duration"><i class="fa fa-calendar"></i>&nbsp;&nbsp;<span id="sbin-date"></span></div>
+                                        <div class="info-item" title="Search"><i class="fa fa-search"></i>&nbsp;&nbsp;<span id="sbin-search"></span></div>
+                                        <div class="info-item" title="User"><i class="fa fa-user"></i>&nbsp;&nbsp;<span id="sbin-user"></span></div>
+                                        <div class="info-item" title="Language"><i class="fa fa-microphone"></i>&nbsp;&nbsp;<span id="sbin-lang"></span></div>
                                     </div>
                                     <div class="card-content">
                                         <div class="row">
@@ -502,7 +503,9 @@ try {
                                     </div>
                                     <div class="card-content">
                                         <div class="actions">
-                                            <button type="button" class="btn btn-info btn-small"><i class="fa fa-bookmark"></i>&nbsp;&nbsp;Bookmark this</button>
+                                            <button type="button" class="btn btn-info btn-small" id="sbin-bookmark">
+                                                <i class="fa fa-bookmark"></i>&nbsp;&nbsp;Bookmark this
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -516,9 +519,11 @@ try {
                                                 <div class="form-group">
                                                     <label for="duration">Data Duration</label>
                                                     <div class="input-daterange input-group" id="datepicker">
-                                                        <input type="text" class="input-sm form-control" name="startday" value="<?php echo date("Y-m-d", strtotime($objBin->dataStart)); ?>">
+                                                        <input type="text" class="input-sm form-control" name="startday" value="<?php echo date("Y-m-d",
+                                        strtotime($objBin->dataStart)); ?>">
                                                         <span class="input-group-addon">to</span>
-                                                        <input type="text" class="input-sm form-control" name="endday" value="<?php echo date("Y-m-d", strtotime($objBin->dataEnd)); ?>">
+                                                        <input type="text" class="input-sm form-control" name="endday" value="<?php echo date("Y-m-d",
+                                        strtotime($objBin->dataEnd)); ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -527,44 +532,33 @@ try {
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label for="search-text">Search</label>
-                                                    <input type="text" class="form-control" id="search-text" placeholder="Search Tweets Content">
+                                                    <input type="text" class="form-control" id="search-text" name="search-keyword" placeholder="Search Tweets Content">
                                                     <p class="help-block">empty: from any text.</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label for="from-user">From User</label>
-                                                    <input type="text" class="form-control" id="from-user" placeholder="From User">
+                                                    <input type="text" class="form-control" id="from-user" name="from-user" placeholder="From User">
                                                     <p class="help-block">empty: from any user.</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label for="resolution">Resolution</label><br>
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="resolution" id="perdays" value="per-day" checked="checked"> days
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="resolution" id="perhours" value="per-hour"> hours
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-8">
+                                            <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <label for="language">Language</label><br>
                                                     <label class="checkbox-inline">
-                                                        <input type="checkbox" name="language" id="lan-en" value="en"> en
+                                                        <input type="checkbox" name="language" id="lan-en" value="en" checked="checked"> en
                                                     </label>
                                                     <label class="checkbox-inline">
-                                                        <input type="checkbox" name="language" id="lan-zh" value="zh"> zh
+                                                        <input type="checkbox" name="language" id="lan-zh" value="zh" checked="checked"> zh
                                                     </label>
                                                     <label class="checkbox-inline">
                                                         <input type="checkbox" name="language" id="lan-zhtw" value="zh-tw" checked="checked"> zh-tw
                                                     </label>
                                                     <label class="checkbox-inline">
-                                                        <input type="checkbox" name="language" id="lan-other" value="other"> other
+                                                        <input type="checkbox" name="language" id="lan-other" value="other" checked="checked"> other
                                                     </label>
                                                 </div>
                                             </div>
@@ -572,7 +566,7 @@ try {
                                     </div>
                                     <div class="card-content">
                                         <div class="actions">
-                                            <button type="button" class="btn btn-warning btn-small"><i class="fa fa-refresh"></i>&nbsp;&nbsp;Update Sub-Bin</button>&nbsp;
+                                            <button type="button" class="btn btn-warning btn-small" id="select-subbin"><i class="fa fa-refresh"></i>&nbsp;&nbsp;Update Sub-Bin</button>&nbsp;
                                             <button type="button" class="btn btn-small"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Reset</button>
                                         </div>
                                     </div>
@@ -585,16 +579,16 @@ try {
                                     <div class="card-content">
                                         <div class="row">
                                             <div class="col-md-10">
-                                                <div style="min-width: 200px; height: 300px; margin: 0 auto"></div>
+                                                <div id="timeseries-chart" style="min-width: 200px; height: 300px; margin: 0 auto"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label for="resolution">Resolution</label><br>
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="resolution" id="perdays" value="per-day" checked="checked"> days
+                                                        <input type="radio" name="resolution" id="perdays" value="day" checked="checked"> days
                                                     </label>
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="resolution" id="perhours" value="per-hour"> hours
+                                                        <input type="radio" name="resolution" id="perhours" value="hour"> hours
                                                     </label>
                                                 </div>
                                                 <button type="button" class="btn btn-small">Redraw</button>
@@ -642,16 +636,25 @@ try {
             <!-- /#page-wrapper -->
         </div>
         <!-- /#wrapper -->
-
+        <div id="alert-message" class="alert alert-warning alert-dismissible" role="alert" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span id="alert-content"></span>
+        </div>
+        <!-- /#alert-message -->
         <!-- jquery CDN -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <!-- Bootstrap Core JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <!-- Metis Menu Plugin JavaScript -->
         <script src="resources/metisMenu/dist/metisMenu.min.js"></script>
+        <!-- NProcess JavaScript -->
+        <script src='resources/nprogress/nprogress.js'></script>
+        <!-- Highcharts JavaScript -->
+        <script src="http://code.highcharts.com/highcharts.js"></script>
         <!-- Custom Theme JavaScript -->
         <script src="js/sb-admin-2.js"></script>
         <script src="resources/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript" src="js/binview.js"></script>
         <script type="text/javascript">
             $('.input-daterange').datepicker({
                 format: "yyyy-mm-dd",
@@ -659,7 +662,15 @@ try {
                 autoclose: true,
                 todayHighlight: true
             });
+
+            $(document).ajaxStart(function () {
+                NProgress.start();
+            })
+                    .ajaxStop(function () {
+                        NProgress.done();
+                    });
         </script>
+
     </body>
 
 </html>

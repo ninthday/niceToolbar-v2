@@ -637,3 +637,13 @@ table.dataTable thead .sorting:after {
     content: '\f02b';
     margin:0 5px 0 -15px;
 }
+
+#alert-message {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    margin-left: -200px;
+    width: 400px;
+    z-index: 9999;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+}

@@ -63,6 +63,19 @@ try {
             $aryResult['rsStat'] = true;
             $aryResult['rsContents'] = $result;
             break;
+        case 'lang':
+            $objSBStis = new SubBinStatistic($tcatPDOConn);
+            $result = $objSBStis->getLanguage($binID, $condition);
+            $series = array();
+            foreach ($result as $row) {
+                array_push($series, array(
+                    'lang' => $row['lang'],
+                    'cnt' => $row['cnt']
+                ));
+            }
+            $aryResult['rsStat'] = true;
+            $aryResult['rsContents'] = $series;
+            break;
         default :
             break;
     }

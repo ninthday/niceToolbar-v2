@@ -604,15 +604,15 @@ try {
                                     <div class="card-content">
                                         <div class="row">
                                             <div class="col-md-4 col-xs-6">
-                                                <h4>151,367</h4><small>Contain Mentions</small>
+                                                <h4 id="mention-num"></h4><small>Contain Mentions</small>
                                                 <div id="mention-chart" style="height: 200px; margin: 0 auto"></div>
                                             </div>
                                             <div class="col-md-4  col-xs-6">
-                                                <h4>151,367</h4><small>Contain Hashtags</small>
+                                                <h4 id="hashtag-num"></h4><small>Contain Hashtags</small>
                                                 <div id="hashtag-chart" style="height: 200px; margin: 0 auto"></div>
                                             </div>
                                             <div class="col-md-4 col-xs-6">
-                                                <h4>151,367</h4><small>Contain Media</small>
+                                                <h4 id="media-num"></h4><small>Contain Media</small>
                                                 <div id="media-chart" style="height: 200px; margin: 0 auto"></div>
                                             </div>
                                         </div>
@@ -623,7 +623,7 @@ try {
                                 <div class="card card-default">
                                     <div class="card-content">
                                         <h4>Language</h4><small>Percentage (%)</small>
-                                        <div style="height: 200px; margin: 0 auto"></div>
+                                        <div id="language-chart" style="height: 200px; margin: 0 auto"></div>
                                     </div>
                                 </div>
                             </div>

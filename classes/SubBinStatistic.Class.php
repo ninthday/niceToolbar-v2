@@ -69,7 +69,8 @@ class SubBinStatistic
         $sql .= " GROUP BY `datepart` ORDER BY `datepart` ";
 
         $stmt = $this->pdoConn->dbh->prepare($sql);
-        $stmt->bindParam(':dateStart', $conditionDate['date_start'], \PDO::PARAM_STR);
+        $stmt->bindParam(':dateStart', $conditionDate['date_start'],
+                \PDO::PARAM_STR);
         $stmt->bindParam(':dateEnd', $conditionDate['date_end'], \PDO::PARAM_STR);
 
         if (!empty($condition['search_keyword'])) {
@@ -78,7 +79,8 @@ class SubBinStatistic
         }
 
         if (!empty($condition['from_user'])) {
-            $stmt->bindParam(':fromUser', $condition['from_user'], \PDO::PARAM_STR);
+            $stmt->bindParam(':fromUser', $condition['from_user'],
+                    \PDO::PARAM_STR);
         }
 
         $stmt->execute();
@@ -102,6 +104,50 @@ class SubBinStatistic
         return $rtn;
     }
 
+    public function getLanguage($binID, $condition)
+    {
+        $objBinMgr = new BinManager($this->pdoConn);
+        $binName = $objBinMgr->getBinNameByID($binID);
+        $nrOfTweets = $this->getTotalTweets($binName, $condition);
+
+        $conditionDate = $this->transConditionDate($condition);
+
+        $sql = 'SELECT `lang`, COUNT(*) AS `cnt` FROM `' . $binName . '_tweets` `t`';
+        $sql .= $this->getSQLWhereCondition($condition);
+        $sql .= ' GROUP BY `lang` ORDER BY `cnt` DESC LIMIT 0,6 ';
+        $stmt = $this->pdoConn->dbh->prepare($sql);
+        $stmt->bindParam(':dateStart', $conditionDate['date_start'],
+                \PDO::PARAM_STR);
+        $stmt->bindParam(':dateEnd', $conditionDate['date_end'], \PDO::PARAM_STR);
+
+        if (!empty($condition['search_keyword'])) {
+            $keyword = '%' . $condition['search_keyword'] . '%';
+            $stmt->bindParam(':searchKeyword', $keyword, \PDO::PARAM_STR);
+        }
+
+        if (!empty($condition['from_user'])) {
+            $stmt->bindParam(':fromUser', $condition['from_user'],
+                    \PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        $rtn = array();
+        $sumLang = 0;
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            array_push($rtn,
+                    array(
+                'lang' => $row['lang'],
+                'cnt' => intval($row['cnt'])
+            ));
+            $sumLang += intval($row['cnt']);
+        }
+        
+        array_push($rtn, array(
+            'lang' => 'other',
+            'cnt' => ($nrOfTweets - $sumLang)
+        ));
+        return $rtn;
+    }
+
     protected function getSQLWhereCondition($condition)
     {
         $whereCondition = '';
@@ -122,7 +168,8 @@ class SubBinStatistic
         // Languages Condition
         if (count($langs) < 4) {
             if (in_array('other', $langs)) {
-                $diffLangs = array_diff($langs, array('en', 'zh', 'zh-tw', 'other'));
+                $diffLangs = array_diff($langs,
+                        array('en', 'zh', 'zh-tw', 'other'));
                 $sql .= ' AND `lang` NOT IN (\'' . implode(', ', $diffLangs) . '\')';
             } else {
                 $sql .= ' AND `lang` IN (\'' . implode(', ', $langs) . '\')';
@@ -146,7 +193,8 @@ class SubBinStatistic
         $sql = 'SELECT COUNT(*) AS `nrOfTweets` FROM `' . $binName . '_tweets` `t`';
         $sql .= $this->getSQLWhereCondition($condition);
         $stmt = $this->pdoConn->dbh->prepare($sql);
-        $stmt->bindParam(':dateStart', $conditionDate['date_start'], \PDO::PARAM_STR);
+        $stmt->bindParam(':dateStart', $conditionDate['date_start'],
+                \PDO::PARAM_STR);
         $stmt->bindParam(':dateEnd', $conditionDate['date_end'], \PDO::PARAM_STR);
 
         if (!empty($condition['search_keyword'])) {
@@ -155,7 +203,8 @@ class SubBinStatistic
         }
 
         if (!empty($condition['from_user'])) {
-            $stmt->bindParam(':fromUser', $condition['from_user'], \PDO::PARAM_STR);
+            $stmt->bindParam(':fromUser', $condition['from_user'],
+                    \PDO::PARAM_STR);
         }
         $stmt->execute();
         if (!$results = $stmt->fetch(\PDO::FETCH_ASSOC)) {
@@ -170,9 +219,10 @@ class SubBinStatistic
         $sql = 'SELECT COUNT(DISTINCT `tweet_id`) AS `nrOfMentions` FROM `' . $binName . '_mentions` `m`'
                 . 'INNER JOIN `' . $binName . '_tweets` `t` ON `t`.`id` = `m`.`tweet_id`';
         $sql .= $this->getSQLWhereCondition($condition);
-        
+
         $stmt = $this->pdoConn->dbh->prepare($sql);
-        $stmt->bindParam(':dateStart', $conditionDate['date_start'], \PDO::PARAM_STR);
+        $stmt->bindParam(':dateStart', $conditionDate['date_start'],
+                \PDO::PARAM_STR);
         $stmt->bindParam(':dateEnd', $conditionDate['date_end'], \PDO::PARAM_STR);
 
         if (!empty($condition['search_keyword'])) {
@@ -181,7 +231,8 @@ class SubBinStatistic
         }
 
         if (!empty($condition['from_user'])) {
-            $stmt->bindParam(':fromUser', $condition['from_user'], \PDO::PARAM_STR);
+            $stmt->bindParam(':fromUser', $condition['from_user'],
+                    \PDO::PARAM_STR);
         }
         $stmt->execute();
         if (!$results = $stmt->fetch(\PDO::FETCH_ASSOC)) {
@@ -197,7 +248,8 @@ class SubBinStatistic
                 . 'INNER JOIN `' . $binName . '_tweets` `t` ON `t`.`id` = `h`.`tweet_id`';
         $sql .= $this->getSQLWhereCondition($condition);
         $stmt = $this->pdoConn->dbh->prepare($sql);
-        $stmt->bindParam(':dateStart', $conditionDate['date_start'], \PDO::PARAM_STR);
+        $stmt->bindParam(':dateStart', $conditionDate['date_start'],
+                \PDO::PARAM_STR);
         $stmt->bindParam(':dateEnd', $conditionDate['date_end'], \PDO::PARAM_STR);
 
         if (!empty($condition['search_keyword'])) {
@@ -206,7 +258,8 @@ class SubBinStatistic
         }
 
         if (!empty($condition['from_user'])) {
-            $stmt->bindParam(':fromUser', $condition['from_user'], \PDO::PARAM_STR);
+            $stmt->bindParam(':fromUser', $condition['from_user'],
+                    \PDO::PARAM_STR);
         }
         $stmt->execute();
         if (!$results = $stmt->fetch(\PDO::FETCH_ASSOC)) {
@@ -221,9 +274,10 @@ class SubBinStatistic
         $sql = 'SELECT COUNT(DISTINCT `tweet_id`) AS `nrOfMedias` FROM `' . $binName . '_media` `m`'
                 . 'INNER JOIN `' . $binName . '_tweets` `t` ON `t`.`id` = `m`.`tweet_id`';
         $sql .= $this->getSQLWhereCondition($condition);
-        
+
         $stmt = $this->pdoConn->dbh->prepare($sql);
-        $stmt->bindParam(':dateStart', $conditionDate['date_start'], \PDO::PARAM_STR);
+        $stmt->bindParam(':dateStart', $conditionDate['date_start'],
+                \PDO::PARAM_STR);
         $stmt->bindParam(':dateEnd', $conditionDate['date_end'], \PDO::PARAM_STR);
 
         if (!empty($condition['search_keyword'])) {
@@ -232,7 +286,8 @@ class SubBinStatistic
         }
 
         if (!empty($condition['from_user'])) {
-            $stmt->bindParam(':fromUser', $condition['from_user'], \PDO::PARAM_STR);
+            $stmt->bindParam(':fromUser', $condition['from_user'],
+                    \PDO::PARAM_STR);
         }
         $stmt->execute();
         if (!$results = $stmt->fetch(\PDO::FETCH_ASSOC)) {

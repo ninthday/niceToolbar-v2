@@ -1,6 +1,7 @@
 $(document).ready(function () {
     showTimeSeries();
     showContain();
+    showLanguagePercentage();
     $("#select-subbin").click(function () {
         var langs = $("input[name='language']:checkbox:checked").map(function () {
             return $(this).val();
@@ -92,7 +93,7 @@ $(document).ready(function () {
     function drawMention(contents) {
         var hasContain = Math.floor((contents.nrOfMentions / contents.nrOfTweets) * 10000) / 100;
         var notContain = 100 - hasContain;
-
+        $("#mention-num").text(contents.nrOfMentions.toLocaleString());
         $('#mention-chart').highcharts({
             chart: {
                 type: 'pie'
@@ -132,7 +133,7 @@ $(document).ready(function () {
     function drawHashtag(contents) {
         var hasContain = Math.floor((contents.nrOfHashtags / contents.nrOfTweets) * 10000) / 100;
         var notContain = 100 - hasContain;
-
+        $("#hashtag-num").text(contents.nrOfHashtags.toLocaleString());
         $('#hashtag-chart').highcharts({
             chart: {
                 type: 'pie'
@@ -172,7 +173,7 @@ $(document).ready(function () {
     function drawMedia(contents) {
         var hasContain = Math.floor((contents.nrOfMedias / contents.nrOfTweets) * 10000) / 100;
         var notContain = 100 - hasContain;
-
+        $("#media-num").text(contents.nrOfMedias.toLocaleString());
         $('#media-chart').highcharts({
             chart: {
                 type: 'pie'
@@ -209,8 +210,69 @@ $(document).ready(function () {
         });
     }
 
-    function drawLanguage() {
-
+    function drawLanguage(contents) {
+        $('#language-chart').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: null
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+            },
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                layout: 'vertical',
+                x: 0,
+                y: 10
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                    name: "Language",
+                    colorByPoint: true,
+                    data: [{
+                            name: contents[0].lang,
+                            color: '#ce1126',
+                            y: contents[0].cnt
+                        }, {
+                            name: contents[1].lang,
+                            color: '#f2af00',
+                            y: contents[1].cnt
+                        }, {
+                            name: contents[2].lang,
+                            color: '#7ab800',
+                            y: contents[2].cnt
+                        }, {
+                            name: contents[3].lang,
+                            color: '#0085c3',
+                            y: contents[3].cnt
+                        }, {
+                            name: contents[4].lang,
+                            color: '#b7295a',
+                            y: contents[4].cnt
+                        }, {
+                            name: contents[5].lang,
+                            color: '#71c6c1',
+                            y: contents[5].cnt
+                        }, {
+                            name: contents[6].lang,
+                            color: '#009bbb',
+                            y: contents[6].cnt
+                        }
+                    ]
+                }]
+        });
     }
 
     function showTimeSeries() {
@@ -264,8 +326,28 @@ $(document).ready(function () {
         });
     }
 
-    function getLanguageData() {
+    function showLanguagePercentage() {
+        var condition = getSubBinCondition();
+        var binID = $("#bin-id").val();
+        var strLangs = condition.langs.join('+');
+        var jqxhr = $.getJSON('ajax_binview.php', {
+            op: 'lang',
+            bid: binID,
+            ds: condition.dateStart,
+            de: condition.dateEnd,
+            sk: condition.searchKeyword,
+            fu: condition.fromUser,
+            lg: strLangs,
+            res: condition.res
+        });
 
+        jqxhr.done(function (data) {
+            if (data.rsStat) {
+                drawLanguage(data.rsContents);
+            } else {
+                showMessage('danger', data.rsContents);
+            }
+        });
     }
 
 

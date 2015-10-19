@@ -1,6 +1,6 @@
 $(document).ready(function () {
     showTimeSeries();
-    
+    showContain();
     $("#select-subbin").click(function () {
         var langs = $("input[name='language']:checkbox:checked").map(function () {
             return $(this).val();
@@ -89,16 +89,124 @@ $(document).ready(function () {
         });
     }
 
-    function drawMention() {
+    function drawMention(contents) {
+        var hasContain = Math.floor((contents.nrOfMentions / contents.nrOfTweets) * 10000) / 100;
+        var notContain = 100 - hasContain;
 
+        $('#mention-chart').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: null
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                    name: "Contain Mention",
+                    colorByPoint: true,
+                    data: [{
+                            name: "No",
+                            color: '#0057b8',
+                            y: notContain
+                        }, {
+                            name: "Yes",
+                            color: '#e53238',
+                            y: hasContain
+                        }]
+                }]
+        });
     }
 
-    function drawHashtag() {
+    function drawHashtag(contents) {
+        var hasContain = Math.floor((contents.nrOfHashtags / contents.nrOfTweets) * 10000) / 100;
+        var notContain = 100 - hasContain;
 
+        $('#hashtag-chart').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: null
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                    name: "Contain Hastag",
+                    colorByPoint: true,
+                    data: [{
+                            name: "No",
+                            color: '#0057b8',
+                            y: notContain
+                        }, {
+                            name: "Yes",
+                            color: '#e53238',
+                            y: hasContain
+                        }]
+                }]
+        });
     }
 
-    function drawMedia() {
+    function drawMedia(contents) {
+        var hasContain = Math.floor((contents.nrOfMedias / contents.nrOfTweets) * 10000) / 100;
+        var notContain = 100 - hasContain;
 
+        $('#media-chart').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: null
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                    name: "Contain Media",
+                    colorByPoint: true,
+                    data: [{
+                            name: "No",
+                            color: '#0057b8',
+                            y: notContain
+                        }, {
+                            name: "Yes",
+                            color: '#e53238',
+                            y: hasContain
+                        }]
+                }]
+        });
     }
 
     function drawLanguage() {
@@ -109,7 +217,6 @@ $(document).ready(function () {
         var condition = getSubBinCondition();
         var binID = $("#bin-id").val();
         var strLangs = condition.langs.join('+');
-        var rtn;
         var jqxhr = $.getJSON('ajax_binview.php', {
             op: 'ts',
             bid: binID,
@@ -128,11 +235,33 @@ $(document).ready(function () {
                 showMessage('danger', data.rsContents);
             }
         });
-        return rtn;
     }
 
-    function getContainData() {
+    function showContain() {
+        var condition = getSubBinCondition();
+        var binID = $("#bin-id").val();
+        var strLangs = condition.langs.join('+');
+        var jqxhr = $.getJSON('ajax_binview.php', {
+            op: 'ctn',
+            bid: binID,
+            ds: condition.dateStart,
+            de: condition.dateEnd,
+            sk: condition.searchKeyword,
+            fu: condition.fromUser,
+            lg: strLangs,
+            res: condition.res
+        });
 
+        jqxhr.done(function (data) {
+            if (data.rsStat) {
+                showMessage('success', 'Sub-Bin has been updated.');
+                drawMention(data.rsContents);
+                drawHashtag(data.rsContents);
+                drawMedia(data.rsContents);
+            } else {
+                showMessage('danger', data.rsContents);
+            }
+        });
     }
 
     function getLanguageData() {

@@ -605,15 +605,15 @@ try {
                                         <div class="row">
                                             <div class="col-md-4 col-xs-6">
                                                 <h4>151,367</h4><small>Contain Mentions</small>
-                                                <div style="height: 200px; margin: 0 auto"></div>
+                                                <div id="mention-chart" style="height: 200px; margin: 0 auto"></div>
                                             </div>
                                             <div class="col-md-4  col-xs-6">
                                                 <h4>151,367</h4><small>Contain Hashtags</small>
-                                                <div style="height: 200px; margin: 0 auto"></div>
+                                                <div id="hashtag-chart" style="height: 200px; margin: 0 auto"></div>
                                             </div>
                                             <div class="col-md-4 col-xs-6">
                                                 <h4>151,367</h4><small>Contain Media</small>
-                                                <div style="height: 200px; margin: 0 auto"></div>
+                                                <div id="media-chart" style="height: 200px; margin: 0 auto"></div>
                                             </div>
                                         </div>
                                     </div>

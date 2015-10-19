@@ -26,28 +26,20 @@ $aryResult = array();
 
 try {
     $tcatPDOConn = myPDOConn::getInstance('tcatPDOConnConfig.inc.php');
+    $binID = intval(filter_input(INPUT_GET, 'bid', FILTER_SANITIZE_NUMBER_INT));
+    $condition = array(
+        'date_start' => filter_input(INPUT_GET, 'ds', FILTER_SANITIZE_STRING),
+        'date_end' => filter_input(INPUT_GET, 'de', FILTER_SANITIZE_STRING),
+        'search_keyword' => filter_input(INPUT_GET, 'sk', FILTER_SANITIZE_STRING),
+        'from_user' => filter_input(INPUT_GET, 'fu', FILTER_SANITIZE_STRING),
+        'languages' => filter_input(INPUT_GET, 'lg', FILTER_SANITIZE_STRING),
+        'resolution' => filter_input(INPUT_GET, 'res', FILTER_SANITIZE_STRING)
+    );
     switch ($opt) {
         case 'ts':
-            $binID = intval(filter_input(INPUT_GET, 'bid',
-                            FILTER_SANITIZE_NUMBER_INT));
-            $condition = array(
-                'date_start' => filter_input(INPUT_GET, 'ds',
-                        FILTER_SANITIZE_STRING),
-                'date_end' => filter_input(INPUT_GET, 'de',
-                        FILTER_SANITIZE_STRING),
-                'search_keyword' => filter_input(INPUT_GET, 'sk',
-                        FILTER_SANITIZE_STRING),
-                'from_user' => filter_input(INPUT_GET, 'fu',
-                        FILTER_SANITIZE_STRING),
-                'languages' => filter_input(INPUT_GET, 'lg',
-                        FILTER_SANITIZE_STRING),
-                'resolution' => filter_input(INPUT_GET, 'res',
-                        FILTER_SANITIZE_STRING)
-            );
-
             $objSBStis = new SubBinStatistic($tcatPDOConn);
             $result = $objSBStis->getTimeSeries($binID, $condition);
-            
+
             $xCategory = array();
             $series = array(
                 'nrOfTweets' => array(),
@@ -63,6 +55,13 @@ try {
             $aryResult['rsStat'] = true;
             $aryResult['rsContents']['xCategory'] = $xCategory;
             $aryResult['rsContents']['series'] = $series;
+            break;
+        case 'ctn':
+            $objSBStis = new SubBinStatistic($tcatPDOConn);
+            $result = $objSBStis->getContains($binID, $condition);
+            
+            $aryResult['rsStat'] = true;
+            $aryResult['rsContents'] = $result;
             break;
         default :
             break;

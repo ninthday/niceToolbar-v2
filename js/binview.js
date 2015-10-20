@@ -17,6 +17,8 @@ $(document).ready(function () {
         $("#sbin-bookmark").removeAttr("disabled");
 
         showTimeSeries();
+        showContain();
+        showLanguagePercentage();
     });
 
     $("#sbin-bookmark").click(function () {
@@ -211,6 +213,16 @@ $(document).ready(function () {
     }
 
     function drawLanguage(contents) {
+        var dataLangs = [];
+        var arrColor = ['#ce1126', '#f2af00', '#7ab800', '#0085c3', '#b7295a', '#71c6c1', '#009bbb'];
+        for (var i = 0, len = contents.length; i < len; ++i) {
+            var langCount = {
+                name: contents[i].lang,
+                color: arrColor[i],
+                y: contents[i].cnt
+            };
+            dataLangs.push(langCount);
+        }
         $('#language-chart').highcharts({
             chart: {
                 type: 'pie'
@@ -241,36 +253,7 @@ $(document).ready(function () {
             series: [{
                     name: "Language",
                     colorByPoint: true,
-                    data: [{
-                            name: contents[0].lang,
-                            color: '#ce1126',
-                            y: contents[0].cnt
-                        }, {
-                            name: contents[1].lang,
-                            color: '#f2af00',
-                            y: contents[1].cnt
-                        }, {
-                            name: contents[2].lang,
-                            color: '#7ab800',
-                            y: contents[2].cnt
-                        }, {
-                            name: contents[3].lang,
-                            color: '#0085c3',
-                            y: contents[3].cnt
-                        }, {
-                            name: contents[4].lang,
-                            color: '#b7295a',
-                            y: contents[4].cnt
-                        }, {
-                            name: contents[5].lang,
-                            color: '#71c6c1',
-                            y: contents[5].cnt
-                        }, {
-                            name: contents[6].lang,
-                            color: '#009bbb',
-                            y: contents[6].cnt
-                        }
-                    ]
+                    data: dataLangs
                 }]
         });
     }
@@ -291,7 +274,6 @@ $(document).ready(function () {
         });
         jqxhr.done(function (data) {
             if (data.rsStat) {
-                showMessage('success', 'Sub-Bin has been updated.');
                 drawTimeSeries(data.rsContents);
             } else {
                 showMessage('danger', data.rsContents);
@@ -316,7 +298,6 @@ $(document).ready(function () {
 
         jqxhr.done(function (data) {
             if (data.rsStat) {
-                showMessage('success', 'Sub-Bin has been updated.');
                 drawMention(data.rsContents);
                 drawHashtag(data.rsContents);
                 drawMedia(data.rsContents);

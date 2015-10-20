@@ -76,6 +76,12 @@ try {
             $aryResult['rsStat'] = true;
             $aryResult['rsContents'] = $series;
             break;
+        case 'bi':
+            $objSBStis = new SubBinStatistic($tcatPDOConn);
+            $result = $objSBStis->getSubBinBscicInfo($binID, $condition);
+            $aryResult['rsStat'] = true;
+            $aryResult['rsContents'] = $result;
+            break;
         default :
             break;
     }

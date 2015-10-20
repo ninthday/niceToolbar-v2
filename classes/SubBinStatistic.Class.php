@@ -37,36 +37,14 @@ class SubBinStatistic
         $sql = 'SELECT COUNT(*) AS `nrOfTweets`, COUNT(DISTINCT `from_user_id`) AS `nrOfUsers` '
                 . ', COUNT(`retweet_id`) AS `nrOfRetweets` ';
         if ($condition['resolution'] == 'day') {
-            $sql .= ', DATE_FORMAT(`created_at`, \'%Y-%m-%d\') `datepart` ';
+            $sql .= ', DATE_FORMAT(`created_at`, \'%Y-%m-%d\') `datepart`';
         } elseif ($condition['resolution'] == 'hour') {
-            $sql .= ', DATE_FORMAT(`created_at`, \'%Y-%m-%d %H:00\') `datepart` ';
+            $sql .= ', DATE_FORMAT(`created_at`, \'%Y-%m-%d %H:00\') `datepart`';
         }
-        $sql .= 'FROM `' . $binName . '_tweets` `t`';
-//        $sql .= 'WHERE (`created_at` >= :dateStart AND `created_at` <= :dateEnd)';
-//
-//        //Search Keyword Condition
-//        if (!empty($condition['search_keyword'])) {
-//            $sql .= ' AND `text` LIKE :searchKeyword';
-//            $keyword = '%' . $condition['search_keyword'] . '%';
-//        }
-//
-//        // From user Condition
-//        if (!empty($condition['from_user'])) {
-//            $sql .= ' AND `from_user_name` = :fromUser';
-//        }
-//
-//        // Languages Condition
-//        if (count($langs) < 4) {
-//            if (in_array('other', $langs)) {
-//                $diffLangs = array_diff($langs, array('en', 'zh', 'zh-tw', 'other'));
-//                $sql .= ' AND `lang` NOT IN (\'' . implode(', ', $diffLangs) . '\')';
-//            } else {
-//                $sql .= ' AND `lang` IN (\'' . implode(', ', $langs) . '\')';
-//            }
-//        }
+        $sql .= ' FROM `' . $binName . '_tweets` `t`';
         $sql .= $this->getSQLWhereCondition($condition);
 
-        $sql .= " GROUP BY `datepart` ORDER BY `datepart` ";
+        $sql .= ' GROUP BY `datepart` ORDER BY `datepart` ';
 
         $stmt = $this->pdoConn->dbh->prepare($sql);
         $stmt->bindParam(':dateStart', $conditionDate['date_start'],
@@ -140,12 +118,25 @@ class SubBinStatistic
             ));
             $sumLang += intval($row['cnt']);
         }
-        
-        array_push($rtn, array(
+
+        array_push($rtn,
+                array(
             'lang' => 'other',
             'cnt' => ($nrOfTweets - $sumLang)
         ));
         return $rtn;
+    }
+
+    public function getSubBinBscicInfo($binID, $condition)
+    {
+        $objBinMgr = new BinManager($this->pdoConn);
+        $binName = $objBinMgr->getBinNameByID($binID);
+        $nrOfTweets = $this->getTotalTweets($binName, $condition);
+        $nrOfUsers = $this->getTotalUniqueUsers($binName, $condition);
+        return array(
+            'nrOfTweets' => intval($nrOfTweets),
+            'nrOfUsers' => intval($nrOfUsers)
+        );
     }
 
     protected function getSQLWhereCondition($condition)
@@ -157,22 +148,24 @@ class SubBinStatistic
 
         //Search Keyword Condition
         if (!empty($condition['search_keyword'])) {
-            $sql .= ' AND `t`.`text` LIKE :searchKeyword';
+            $whereCondition .= ' AND `t`.`text` LIKE :searchKeyword';
         }
 
         // From user Condition
         if (!empty($condition['from_user'])) {
-            $sql .= ' AND `from_user_name` = :fromUser';
+            $whereCondition .= ' AND `from_user_name` = :fromUser';
         }
 
         // Languages Condition
         if (count($langs) < 4) {
             if (in_array('other', $langs)) {
-                $diffLangs = array_diff($langs,
-                        array('en', 'zh', 'zh-tw', 'other'));
-                $sql .= ' AND `lang` NOT IN (\'' . implode(', ', $diffLangs) . '\')';
+                $diffLangs = array_diff(array('en', 'zh', 'zh-tw', 'other'),
+                        $langs);
+                $whereCondition .= ' AND `lang` NOT IN (\'' . implode('\', \'',
+                                $diffLangs) . '\')';
             } else {
-                $sql .= ' AND `lang` IN (\'' . implode(', ', $langs) . '\')';
+                $whereCondition .= ' AND `lang` IN (\'' . implode('\', \'',
+                                $langs) . '\')';
             }
         }
         return $whereCondition;
@@ -211,6 +204,32 @@ class SubBinStatistic
             throw new Exception('Problem in getting number of ' . $binName . '\'s tweets.');
         }
         return $results['nrOfTweets'];
+    }
+
+    protected function getTotalUniqueUsers($binName, $condition)
+    {
+        $conditionDate = $this->transConditionDate($condition);
+        $sql = 'SELECT COUNT(DISTINCT `from_user_id`) AS `nrOfUsers` FROM `' . $binName . '_tweets` `t`';
+        $sql .= $this->getSQLWhereCondition($condition);
+        $stmt = $this->pdoConn->dbh->prepare($sql);
+        $stmt->bindParam(':dateStart', $conditionDate['date_start'],
+                \PDO::PARAM_STR);
+        $stmt->bindParam(':dateEnd', $conditionDate['date_end'], \PDO::PARAM_STR);
+
+        if (!empty($condition['search_keyword'])) {
+            $keyword = '%' . $condition['search_keyword'] . '%';
+            $stmt->bindParam(':searchKeyword', $keyword, \PDO::PARAM_STR);
+        }
+
+        if (!empty($condition['from_user'])) {
+            $stmt->bindParam(':fromUser', $condition['from_user'],
+                    \PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        if (!$results = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            throw new Exception('Problem in getting number of ' . $binName . '\'s Unique users.');
+        }
+        return $results['nrOfUsers'];
     }
 
     protected function getContainMentions($binName, $condition)

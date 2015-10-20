@@ -493,11 +493,11 @@ try {
                                         <div class="row">
                                             <div class="col-xs-6">
                                                 <i class="fa fa-twitter"></i>
-                                                <h3>201,598</h3><small>Number of Tweets</small>
+                                                <h3 id="basic-tweetnum"></h3><small>Number of Tweets</small>
                                             </div>
                                             <div class="col-xs-6">
                                                 <i class="fa fa-user"></i>
-                                                <h3>151,367</h3><small>Number of Users</small>
+                                                <h3 id="basic-usernum"></h3><small>Number of Users</small>
                                             </div>
                                         </div>
                                     </div>

@@ -16,6 +16,7 @@ $(document).ready(function () {
         $("#sbin-lang").text(condition.langs.join(', '));
         $("#sbin-bookmark").removeAttr("disabled");
 
+        showSubBinBasic();
         showTimeSeries();
         showContain();
         showLanguagePercentage();
@@ -331,6 +332,30 @@ $(document).ready(function () {
         });
     }
 
+    function showSubBinBasic() {
+        var condition = getSubBinCondition();
+        var binID = $("#bin-id").val();
+        var strLangs = condition.langs.join('+');
+        var jqxhr = $.getJSON('ajax_binview.php', {
+            op: 'bi',
+            bid: binID,
+            ds: condition.dateStart,
+            de: condition.dateEnd,
+            sk: condition.searchKeyword,
+            fu: condition.fromUser,
+            lg: strLangs,
+            res: condition.res
+        });
+
+        jqxhr.done(function (data) {
+            if (data.rsStat) {
+                $("#basic-tweetnum").text(data.rsContents.nrOfTweets.toLocaleString());
+                $("#basic-usernum").text(data.rsContents.nrOfUsers.toLocaleString());
+            } else {
+                showMessage('danger', data.rsContents);
+            }
+        });
+    }
 
     /**
      * 

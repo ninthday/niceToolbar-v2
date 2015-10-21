@@ -157,9 +157,9 @@ class SubBinStatistic
         }
 
         // Languages Condition
-        if (count($langs) < 4) {
+        if (count($langs) < 5) {
             if (in_array('other', $langs)) {
-                $diffLangs = array_diff(array('en', 'zh', 'zh-tw', 'other'),
+                $diffLangs = array_diff(array('en', 'zh', 'zhTW', 'ja', 'other'),
                         $langs);
                 $whereCondition .= ' AND `lang` NOT IN (\'' . implode('\', \'',
                                 $diffLangs) . '\')';

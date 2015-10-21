@@ -22,6 +22,10 @@ $(document).ready(function () {
         showLanguagePercentage();
     });
 
+    $("#redraw-resolution").click(function () {
+        showTimeSeries();
+    });
+
     $("#sbin-bookmark").click(function () {
         $(this).attr("disabled", "disabled");
     });

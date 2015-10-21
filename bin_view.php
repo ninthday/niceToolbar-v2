@@ -548,16 +548,19 @@ try {
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <label for="language">Language</label><br>
-                                                    <label class="checkbox-inline">
+                                                    <label class="checkbox-inline" title="English">
                                                         <input type="checkbox" name="language" id="lan-en" value="en" checked="checked"> en
                                                     </label>
-                                                    <label class="checkbox-inline">
+                                                    <label class="checkbox-inline" title="Simplified Chinese">
                                                         <input type="checkbox" name="language" id="lan-zh" value="zh" checked="checked"> zh
                                                     </label>
-                                                    <label class="checkbox-inline">
-                                                        <input type="checkbox" name="language" id="lan-zhtw" value="zh-tw" checked="checked"> zh-tw
+                                                    <label class="checkbox-inline" title="Traditional Chinese">
+                                                        <input type="checkbox" name="language" id="lan-zhtw" value="zhTW" checked="checked"> zhTW
                                                     </label>
-                                                    <label class="checkbox-inline">
+                                                    <label class="checkbox-inline" title="Japanese">
+                                                        <input type="checkbox" name="language" id="lan-ja" value="ja" checked="checked"> ja
+                                                    </label>
+                                                    <label class="checkbox-inline" title="Other Language">
                                                         <input type="checkbox" name="language" id="lan-other" value="other" checked="checked"> other
                                                     </label>
                                                 </div>
@@ -566,7 +569,7 @@ try {
                                     </div>
                                     <div class="card-content">
                                         <div class="actions">
-                                            <button type="button" class="btn btn-warning btn-small" id="select-subbin"><i class="fa fa-refresh"></i>&nbsp;&nbsp;Update Sub-Bin</button>&nbsp;
+                                            <button id="select-subbin" type="button" class="btn btn-warning btn-small"><i class="fa fa-refresh"></i>&nbsp;&nbsp;Update Sub-Bin</button>&nbsp;
                                             <button type="button" class="btn btn-small"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Reset</button>
                                         </div>
                                     </div>
@@ -591,7 +594,7 @@ try {
                                                         <input type="radio" name="resolution" id="perhours" value="hour"> hours
                                                     </label>
                                                 </div>
-                                                <button type="button" class="btn btn-small">Redraw</button>
+                                                <button id="redraw-resolution" type="button" class="btn btn-small">Redraw</button>
                                             </div>
                                         </div>
                                     </div>
